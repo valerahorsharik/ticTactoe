@@ -21,22 +21,24 @@ $(document).ready(function () {
         if ($(this).html() === '')
         {
             count++;
-            if (count % 2 === 0) {
-                playerMoves.push($(this).attr('id'));
-                $(this).html('X');
-                checkWin(playerMoves);
-                checkDraw(count);
-            } else {
-                computerMoves.push($(this).attr('id'));
-                $(this).html('O');
-                checkWin(computerMoves);
-                checkDraw(count);
-            }
+            //  if (count % 2 === 0) {
+            playerMoves.push($(this).attr('id'));
+            $(this).html('X');
+            checkWin(playerMoves, count);
+            checkDraw(count);
+            //   } else {
+            //     computerMoves.push($(this).attr('id'));
+            //      $(this).html('O');
+            count++;
+            computerTurn(computerMoves);
+            checkWin(computerMoves, count);
+            checkDraw(count);
+            //  }
         }
     });
 
 });
-var checkWin = function (array) {
+var checkWin = function (array, turn) {
     var matches;
     for (i = 0; i < win.length; i++) {
         // console.log('Сейчас проверяется ' + i + ' вариант. ');
@@ -52,14 +54,50 @@ var checkWin = function (array) {
             }
         }
         if (matches === 3) {
-            alert('you win');
+            if (turn % 2 === 0) {
+                alert('Player win');
+            } else {
+                alert('Computer win');
+            }
             window.location.reload();
+            throw "stop";
+            
         }
     }
 };
 var checkDraw = function (count) {
-    if (count == 10) {
+    if (count === 10) {
         alert('Draw');
         window.location.reload();
     }
+};
+
+var computerTurn = function (computerMoves) {
+    var repeat = true;
+    for (i = 0; i < win.length; i++) {
+        if (repeat) {
+            for (j = 0; j < win[i].length; j++) {
+                if ($("#" + win[i][j]).html() === "") {
+                    // alert('яб сюда походил ' + win[i][j]);
+                    computerMoves.push(win[i][j]);
+                    $("#" + win[i][j]).html('O');
+                    repeat = false;
+                    break;
+                }
+            }
+        } else {
+            break;
+        }
+    }
+//    var repeat = true;
+//    var current = 1;
+//    while (repeat === true && current < 10) {
+//        if ($("#" + current).html() === "") {
+//            //  alert('яб сюда походил ' + current);
+//            computerMoves.push(current);
+//            $("#" + current).html('O');
+//            repeat = false;
+//        }
+//        current++;
+//    }
 }
